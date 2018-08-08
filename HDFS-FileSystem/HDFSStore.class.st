@@ -55,7 +55,7 @@ HDFSStore >> basicIsFile: aNode [
 	^ (aNode at: 'type') = 'FILE'.
 ]
 
-{ #category : #'error signalling' }
+{ #category : #accessing }
 HDFSStore >> basicOpen: path writable: aBoolean [ 
 	
 	^ self
