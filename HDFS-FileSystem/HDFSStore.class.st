@@ -55,6 +55,12 @@ HDFSStore >> basicIsFile: aNode [
 	^ (aNode at: 'type') = 'FILE'.
 ]
 
+{ #category : #abstract }
+HDFSStore >> basicIsSymlink: aNode [
+	
+	^ (aNode at: 'type') = 'SYMLINK'.
+]
+
 { #category : #accessing }
 HDFSStore >> basicOpen: path writable: aBoolean [ 
 	
@@ -75,6 +81,26 @@ HDFSStore >> basicSizeOf: aNode [
 { #category : #abstract }
 HDFSStore >> createDirectory: aPath [
 	self put: aPath operation: 'MKDIRS' data: (ZnStringEntity text: '').
+]
+
+{ #category : #'as yet unclassified' }
+HDFSStore >> createFile: anAbsolutePath [ 
+	| response location client |
+	response := self put: anAbsolutePath operation: 'CREATE&noredirect=true'.
+	location := (STONJSON fromString: response entity contents) at: 'Location'.
+	client := ZnClient new.
+	response := client put: location contents: #() ;  put: location contents: #()  ; response.
+
+]
+
+{ #category : #'as yet unclassified' }
+HDFSStore >> createFile: anAbsolutePath withContent: content [
+	| response location client |
+	response := self put: anAbsolutePath operation: 'CREATE&noredirect=true'.
+	location := (STONJSON fromString: response entity contents) at: 'Location'.
+	client := ZnClient new.
+	^ client put: location contents: content ;  put: location contents: #()  ; response.
+
 ]
 
 { #category : #accessing }
@@ -152,9 +178,42 @@ HDFSStore >> nodeAt: anAbsolutePath ifPresent: aBlockClosure ifAbsent: aBlockClo
 		ifFalse: [ aBlockClosure3 value ]
 ]
 
+{ #category : #public }
+HDFSStore >> openFileStream: path writable: writable [
+	self subclassResponsibility
+]
+
+{ #category : #printing }
+HDFSStore >> post: aPath operation: anOperation [
+	^ ZnEasy
+		post: ('http://' , host , ':' , port , '/webhdfs/v1' , aPath pathString , '?' , authStrategy authorizationSuffix , 'op=' , anOperation) data: (ZnStringEntity text: '').
+]
+
+{ #category : #printing }
+HDFSStore >> post: aPath operation: anOperation data: data [
+	^ ZnEasy
+		post: ('http://' , host , ':' , port , '/webhdfs/v1' , aPath pathString , '?' , authStrategy authorizationSuffix , 'op=' , anOperation) data: data.
+]
+
+{ #category : #'as yet unclassified' }
+HDFSStore >> post: anAbsolutePath operation: anOperation follow: aBoolean [
+	| client url |
+	^ aBoolean
+		ifTrue: [ self post: anAbsolutePath operation: anOperation ]
+		ifFalse: [ client := ZnClient new.
+			url := 'http://' , host , ':' , port , '/webhdfs/v1' , anAbsolutePath pathString , '?' , authStrategy authorizationSuffix
+				, 'op=' , anOperation.
+			client
+				url: url;
+				followRedirects: false;
+				entity: (ZnStringEntity text: '');
+				post;
+				response ]
+]
+
 { #category : #printing }
 HDFSStore >> put: aPath operation: anOperation [
-	self put: aPath operation: anOperation data: (ZnStringEntity text:'').
+	^self put: aPath operation: anOperation data: (ZnStringEntity text:'').
 ]
 
 { #category : #printing }
