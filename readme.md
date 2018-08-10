@@ -61,13 +61,17 @@ fileSystem rename:<oldName> to: <newName>
 Files can be accessed using FileReference(s).
 ```
 fileReference := fileSystem / path / of / the / file. "get the file reference"
+fileReference createFile. "creates a file at the path indicated in the file reference"
 fileReference contents. "read the contents of the file"
 fileReference readStream. "get a ReadStream on the file"
+fileReference writeStream. "get a WriteStream on the file"
 ```
 
-# Writing on a file
-The HDFS API does not allow to change the content of a File.
-The only allowed operation is to _Append_.
+### Writing on a file
+The HDFS API does not allow to directly write on a File.
+The only allowed operation is the _append_.
+
+Therefore, the WriteStream of an HDFS file reference allows only such operation (both with `nextPutAll:` and `appendAll:`)
 
 
 
