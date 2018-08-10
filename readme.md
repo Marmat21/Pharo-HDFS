@@ -47,7 +47,11 @@ In this case, the following code should be executed:
 hdfsStore   := HDFSStore host:<hostName> port:<port>.
 fileSystem  := FileSystem store: hdfsStore.
 ```
-
+To initialize a store with an authentication method, you can use one of the following
+```
+hdfsStore   := HDFSStore host:<hostName> port:<port> username: <username>.
+hdfsStore   := HDFSStore host:<hostName> port:<port> token: <token>.
+```
 ## API
 The Pharo-HDFS API implements the FileSystem API of Pharo.
 As for the default FileSystem, the following operations are supported:
