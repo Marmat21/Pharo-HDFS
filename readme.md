@@ -3,7 +3,7 @@
 This repository provides an API to access, create and delete files on HDFS.
 
 ## Setup
-This API uses the WebHDFS REST API to access the data on the file system.
+This API uses the [WebHDFS REST API](https://hadoop.apache.org/docs/r1.0.4/webhdfs.html) to access the data on the file system.
 Hence, the following option should be added to your `hdfs-site.xml`
 ```
 <property>
