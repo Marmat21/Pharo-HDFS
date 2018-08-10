@@ -6,6 +6,11 @@ FileSystem class >> hdfs [
 ]
 
 { #category : #'*HDFS-FileSystem' }
+FileSystem class >> hdfsWithToken: aToken [
+	^ self store: (HDFSStore authStrategy: (TokenHDFSAuth  withToken:  aToken))
+]
+
+{ #category : #'*HDFS-FileSystem' }
 FileSystem class >> hdfsWithUser: anUser [
 	^ self store: (HDFSStore authStrategy: (UsernameHDFSAuth withUsername: anUser))
 ]

@@ -21,7 +21,17 @@ HDFSStore class >> host: anHost port: aPort [
 
 { #category : #'instance creation' }
 HDFSStore class >> host: anHost port: aPort authStrategy: aStrategy [
-	^self new initializeWithHost: anHost port: aPort authStrategy: aStrategy
+	^self new initializeWithHost: anHost port: aPort strategy: aStrategy
+]
+
+{ #category : #'instance creation' }
+HDFSStore class >> host: anHost port: aPort token: aToken [
+	^self new initializeWithHost: anHost port: aPort strategy: (TokenHDFSAuth withToken: aToken)
+]
+
+{ #category : #'instance creation' }
+HDFSStore class >> host: anHost port: aPort username: anUsername [
+	^self new initializeWithHost: anHost port: aPort strategy: (UsernameHDFSAuth withUsername: anUsername)
 ]
 
 { #category : #public }
