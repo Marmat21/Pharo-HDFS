@@ -6,6 +6,11 @@ FileSystem class >> hdfs [
 ]
 
 { #category : #'*HDFS-FileSystem' }
+FileSystem class >> hdfsAtHost: aHost user: user [
+	^ self store: (HDFSStore host: '10.0.0.1' port: '9870' username: user).
+]
+
+{ #category : #'*HDFS-FileSystem' }
 FileSystem class >> hdfsWithToken: aToken [
 	^ self store: (HDFSStore authStrategy: (TokenHDFSAuth  withToken:  aToken))
 ]
