@@ -49,7 +49,7 @@ HDFSStore >> basicCreationTimeOf: aJsonFile [
 HDFSStore >> basicEntry: directoryEntry path: aPath nodesDo: aBlock [
 	| response json |
 	response := self request: aPath operation: 'LISTSTATUS'.
-	json := (STONJSON fromString: response contents) at: 'FileStatuses'.
+	json := (STONJSON fromString: (String fromByteArray: response contents)) at: 'FileStatuses'.
 	(json at: 'FileStatus') do: [ :each | aBlock value: each ]
 ]
 
