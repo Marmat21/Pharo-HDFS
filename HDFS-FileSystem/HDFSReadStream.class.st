@@ -3,7 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'fileReference',
-		'position'
+		'position',
+		'fileSize'
 	],
 	#category : #'HDFS-FileSystem'
 }
@@ -19,7 +20,7 @@ HDFSReadStream class >> on: aFileReference [
 { #category : #testing }
 HDFSReadStream >> atEnd [
 	
-	^ position = fileReference size
+	^ position >= fileSize
 ]
 
 { #category : #closing }
@@ -30,7 +31,8 @@ HDFSReadStream >> close [
 
 { #category : #accessing }
 HDFSReadStream >> fileReference: aFileReference [ 
-	fileReference := aFileReference
+	fileReference := aFileReference.
+	fileSize := fileReference size.
 ]
 
 { #category : #testing }

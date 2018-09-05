@@ -118,7 +118,7 @@ HDFSStore >> defaultWorkingDirectory [
 	^ Path
 		from:
 			((STONJSON
-				fromString: (self request: Path new operation: 'GETHOMEDIRECTORY') contents)
+				fromString: (String fromByteArray:  (self request: Path new operation: 'GETHOMEDIRECTORY') contents))
 				at: 'Path')
 ]
 
@@ -184,7 +184,7 @@ HDFSStore >> nodeAt: anAbsolutePath ifPresent: aBlockClosure ifAbsent: aBlockClo
 	| response |
 	response := self request: anAbsolutePath operation: 'GETFILESTATUS'.
 	^ response isSuccess
-		ifTrue: [ aBlockClosure value: ((STONJSON fromString: response contents) at: 'FileStatus') ]
+		ifTrue: [ aBlockClosure value: ((STONJSON fromString: ( String fromByteArray: response contents)) at: 'FileStatus') ]
 		ifFalse: [ aBlockClosure3 value ]
 ]
 
@@ -195,8 +195,17 @@ HDFSStore >> openFileStream: path writable: writable [
 
 { #category : #printing }
 HDFSStore >> post: aPath operation: anOperation [
-	^ ZnEasy
-		post: ('http://' , host , ':' , port , '/webhdfs/v1' , aPath pathString , '?' , authStrategy authorizationSuffix , 'op=' , anOperation) data: (ZnStringEntity text: '').
+	^ ZnClient new
+		beBinary;
+		url:
+			'http://' , host , ':' , port , '/webhdfs/v1' , aPath pathString , '?'
+				, authStrategy authorizationSuffix , 'op=' , anOperation;
+		contents: (ZnStringEntity text: '');
+		post;
+		response
+
+	"ZnEasy
+		post: ('http://' , host , ':' , port , '/webhdfs/v1' , aPath pathString , '?' , authStrategy authorizationSuffix , 'op=' , anOperation) data: (ZnStringEntity text: '')."
 ]
 
 { #category : #printing }
@@ -239,6 +248,14 @@ HDFSStore >> rename: sourcePath to: destinationPath [
 
 { #category : #printing }
 HDFSStore >> request: aPath operation: anOperation [
-	^ ZnEasy
-		get: 'http://' , host , ':' , port , '/webhdfs/v1' , aPath pathString , '?' , authStrategy authorizationSuffix , 'op=' , anOperation
+	^ ZnClient new
+		beBinary;
+		url:
+			'http://' , host , ':' , port , '/webhdfs/v1' , aPath pathString , '?'
+				, authStrategy authorizationSuffix , 'op=' , anOperation;
+		get ;
+		response.
+		"End of statement list encountered ->^ ZnEasy
+		get: 'http://' , host , ':' , port , '/webhdfs/v1' , aPath pathString , '?' , authStrategy authorizationSuffix , 'op=' , anOperation"
+		
 ]
