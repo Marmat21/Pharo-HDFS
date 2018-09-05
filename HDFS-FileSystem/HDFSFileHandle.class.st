@@ -20,3 +20,8 @@ HDFSFileHandle >> binaryWriteStreamOn: path [
 	
 	^ ZnBufferedWriteStream on: (HDFSWriteStream on: reference)
 ]
+
+{ #category : #public }
+HDFSFileHandle >> open [
+	"DO NOTHING"
+]
