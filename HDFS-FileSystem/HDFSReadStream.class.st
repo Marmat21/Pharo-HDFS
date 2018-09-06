@@ -53,6 +53,11 @@ HDFSReadStream >> position [
 	^position.
 ]
 
+{ #category : #'as yet unclassified' }
+HDFSReadStream >> position: anInteger [ 
+	position := anInteger
+]
+
 { #category : #reqding }
 HDFSReadStream >> readInto: aCollection startingAt: anInteger count: anInteger3 [
 	| readBytes |
