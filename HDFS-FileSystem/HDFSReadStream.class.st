@@ -49,6 +49,11 @@ HDFSReadStream >> isBinary [
 ]
 
 { #category : #reqding }
+HDFSReadStream >> position [
+	^position.
+]
+
+{ #category : #reqding }
 HDFSReadStream >> readInto: aCollection startingAt: anInteger count: anInteger3 [
 	| readBytes |
 	readBytes := (fileReference fileSystem store
