@@ -61,15 +61,18 @@ HDFSReadStream >> position: anInteger [
 { #category : #reqding }
 HDFSReadStream >> readInto: aCollection startingAt: anInteger count: anInteger3 [
 	| readBytes |
-	readBytes := (fileReference fileSystem store
-		request: fileReference path
-		operation: 'OPEN&offset=' , (anInteger - 1) asString , '&length=' , anInteger3 asString)
-		contents.
-	aCollection
-		replaceFrom: anInteger
-		to: anInteger + readBytes size - 1
-		with: readBytes
-		startingAt: 1.
-	position := position + readBytes size.
-	^ readBytes size
+	^ position < fileSize
+		ifTrue: [ readBytes := (fileReference fileSystem store
+				request: fileReference path
+				operation: 'OPEN&offset=' , position asString , '&length=' , anInteger3 asString)
+				contents.
+			aCollection
+				replaceFrom: anInteger
+				to: anInteger + readBytes size - 1
+				with: readBytes
+				startingAt: 1.
+			position := position + readBytes size.
+			readBytes size ]
+		ifFalse: [ 
+			0 ]
 ]
