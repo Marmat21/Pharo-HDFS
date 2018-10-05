@@ -96,6 +96,7 @@ HDFSStore >> createDirectory: aPath [
 { #category : #'as yet unclassified' }
 HDFSStore >> createFile: anAbsolutePath [ 
 	| response location client |
+	""
 	response := self put: anAbsolutePath operation: 'CREATE&noredirect=true'.
 	location := (STONJSON fromString: response entity contents) at: 'Location'.
 	client := ZnClient new.
