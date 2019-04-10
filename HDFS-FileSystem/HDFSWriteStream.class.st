@@ -68,6 +68,11 @@ HDFSWriteStream >> isBinary [
 ]
 
 { #category : #'as yet unclassified' }
+HDFSWriteStream >> next:x putAll: aCollection startingAt: y [
+	^self appendAll: aCollection
+]
+
+{ #category : #'as yet unclassified' }
 HDFSWriteStream >> nextPutAll: aCollection [ 
 	^self appendAll: aCollection
 ]
